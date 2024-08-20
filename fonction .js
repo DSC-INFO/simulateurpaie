@@ -6,7 +6,7 @@ function arrondi(x) {
 
 function simulateurPaie(param){
 
-    const brut = param.brut
+    const brut = param.brut+param.AboTel*10/100
 
     // calcule le cout  
     const prevoyance=arrondi(brut*1.5/100)
@@ -45,7 +45,7 @@ function simulateurPaie(param){
     const IKm=param.IKm
 
     // calcule le cout  
-    const salaire_net_apres_impots=arrondi(salaire_net_avant_impots-impots+IKm)
+    const salaire_net_apres_impots=arrondi(salaire_net_avant_impots-impots+IKm-param.AboTel*10/100)
 
     // calcule le cout  
     const ss_D=arrondi(brut*13/100)
