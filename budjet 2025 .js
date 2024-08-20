@@ -13,12 +13,15 @@ const brut = Number.parseFloat(args.at(2))
 const taux_impots = Number.parseFloat(args.at(3))
 // Affecter le 5ème argument ( index 4 ) dans la variable IKm
 const IKm = Number.parseFloat(args.at(4))
+// Affecter le 6ème argument ( index 5 ) dans la variable AboTel
+const AboTel = Number.parseFloat(args.at(5))
 
 // Construire un objet contenant les paramètres d'appel de simulateurPaie()
 const paramSimulateurPaie =  {
     brut,
     taux_impots,
-    IKm
+    IKm,
+    AboTel
 }
 // Appeler la fonction simulateurPaie() et récupérer le résultat
 const res = simulateurPaie(paramSimulateurPaie)
