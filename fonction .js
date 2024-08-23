@@ -82,7 +82,7 @@ function simulateurPaie(param){
     const urssaf=arrondi(ss_D+ss_déplaf+ss_deplaf_P+ss_plaf+ss_plaf_P+famille+csg+crds+cont_dues)
 
     // calcule le cout  
-    const retr=arrondi(APEC+comp_t1+comp_t1_P)
+    const retr=arrondi(APEC+apec_P+comp_t1+comp_t1_P)
 
     // calcule le cout  
     const prev=arrondi(prevoyance)
