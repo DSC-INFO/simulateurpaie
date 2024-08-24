@@ -79,7 +79,7 @@ function simulateurPaie(param){
     const cout_total=arrondi(brut+cout_patron+param.IKm)
 
     // calcule le cout  
-    const urssaf=arrondi(ss_D+ss_déplaf+ss_deplaf_P+ss_plaf+ss_plaf_P+famille+csg+crds+cont_dues)
+    const urssaf=arrondi(ss_D+ss_déplaf+ss_deplaf_P+ss_plaf+ss_plaf_P+famille+csg+crds+cont_dues+atmp)
 
     // calcule le cout  
     const retr=arrondi(APEC+apec_P+comp_t1+comp_t1_P)
