@@ -1,7 +1,13 @@
 "use strict";
 
 // Importer la fonction simulateurPaie()
-const { simulateurPaie } = require("./fonction ")
+const { simulateurPaie } = require("./fonction")
+
+// Vérification des arguments
+if (process.argv.length < 6) {
+  console.error("Usage: node script.js <brut> <tauxImpots> <iKm> <aboTel>");
+  process.exit(1);
+}
 
 /*
  process.argv contient les arguments en ligne de commande, qui a été tapé dans la console ( terminal )
