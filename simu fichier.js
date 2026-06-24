@@ -3,7 +3,7 @@
 const fs = require("node:fs")
 
 // Importer la fonction simulateurPaie()
-const { simulateurPaie } = require("./fonction ")
+const { simulateurPaie } = require("./fonction")
 
 const args = process.argv
 // Affecte le 3ème argument ( index 2 ) dans la variable brut
