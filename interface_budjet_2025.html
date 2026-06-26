@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Paie 2025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .input-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 180px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input[type="number"] {
+            padding: 8px;
+            width: 150px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .results-section {
+            margin-bottom: 15px;
+        }
+        .results-section h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        .result-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .result-line:last-child {
+            border-bottom: none;
+        }
+        .separator {
+            border: none;
+            height: 1px;
+            background: #ccc;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simulateur de Paie 2025</h1>
+    
+    <div class="input-container">
+        <div class="input-group">
+            <label for="brut">Salaire Brut (€):</label>
+            <input type="number" id="brut" step="0.01" placeholder="0.00">
+        </div>
+        <div class="input-group">
+            <label for="taux_impots">Taux Impôts (%):</label>
+            <input type="number" id="taux_impots" step="0.01" placeholder="0.00">
+        </div>
+        <div class="input-group">
+            <label for="IKm">Indemnités Kilométriques (€):</label>
+            <input type="number" id="IKm" step="0.01" placeholder="0.00">
+        </div>
+        <div class="input-group">
+            <label for="AboTel">Abonnement Téléphone (€):</label>
+            <input type="number" id="AboTel" step="0.01" placeholder="0.00">
+        </div>
+        <button onclick="calculerPaie()">Calculer la Paie</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        // Fonction simulateurPaie adaptée pour le navigateur
+        function simulateurPaie(params) {
+            const { brut, taux_impots, IKm, AboTel } = params;
+
+            // Calcul des cotisations salariales (valeurs typiques pour la France 2025)
+            const ss_plaf = brut * 0.128;         // Sécurité Sociale plafonnée
+            const ss_déplaf = brut * 0.005;       // Sécurité Sociale déplafonnée
+            const comp_t1 = brut * 0.01;          // Complémentaire tranche 1
+            const APEC = brut * 0.003;           // APEC
+            const csg = brut * 0.092;            // CSG
+            const crds = brut * 0.005;           // CRDS
+
+            // Salaire net avant impôts
+            const salaire_net_avant_impots = brut - (ss_plaf + ss_déplaf + comp_t1 + APEC + csg + crds);
+            
+            // Impôts sur le revenu
+            const impots = salaire_net_avant_impots * (taux_impots / 100);
+            
+            // Salaire net après impôts
+            const salaire_net_apres_impots = salaire_net_avant_impots - impots;
+            
+            // Coût total (brut + charges patronales)
+            const cout_total = brut + (brut * 0.45); // Estimation charges patronales
+
+            // Calcul des charges patronales
+            const ss_D = brut * 0.013;           // Sécurité Sociale danger
+            const prevoyance = brut * 0.015;     // Prévoyance
+            const mutuL = brut * 0.01;           // Mutuelle
+            const atmp = brut * 0.003;           // ATMP
+            const ss_plaf_P = brut * 0.15;       // SS plafonnée patron
+            const ss_deplaf_P = brut * 0.01;     // SS déplafonnée patron
+            const comp_t1_P = brut * 0.02;       // Complémentaire tranche 1 patron
+            const famille = brut * 0.03;         // Famille
+            const apec_P = brut * 0.005;         // APEC patron
+            const cont_dues = brut * 0.002;      // Autres contributions
+
+            // Coût total des charges patronales
+            const cout_patron = ss_D + prevoyance + mutuL + atmp + ss_plaf_P + ss_deplaf_P + comp_t1_P + famille + apec_P + cont_dues;
+
+            // Autres calculs
+            const urssaf = ss_plaf_P + ss_deplaf_P;
+            const retr = brut * 0.15;            // Retraite
+            const prev = prevoyance;            // AXA Prévoyance
+            const mutuel = mutuL;                // AXA Mutuelle
+            const impot = impots;                // Impôts
+
+            return {
+                ss_plaf,
+                ss_déplaf,
+                comp_t1,
+                APEC,
+                csg,
+                crds,
+                salaire_net_avant_impots,
+                impots,
+                salaire_net_apres_impots,
+                cout_total,
+                ss_D,
+                prevoyance,
+                mutuL,
+                atmp,
+                ss_plaf_P,
+                ss_deplaf_P,
+                comp_t1_P,
+                famille,
+                apec_P,
+                cont_dues,
+                cout_patron,
+                urssaf,
+                retr,
+                prev,
+                mutuel,
+                impot
+            };
+        }
+
+        function calculerPaie() {
+            // Récupération des valeurs des champs
+            const brut = parseFloat(document.getElementById('brut').value) || 0;
+            const taux_impots = parseFloat(document.getElementById('taux_impots').value) || 0;
+            const IKm = parseFloat(document.getElementById('IKm').value) || 0;
+            const AboTel = parseFloat(document.getElementById('AboTel').value) || 0;
+
+            // Construction de l'objet de paramètres
+            const paramSimulateurPaie = { brut, taux_impots, IKm, AboTel };
+            
+            // Appel de la fonction de calcul
+            const res = simulateurPaie(paramSimulateurPaie);
+
+            // Formatage des résultats
+            let html = `
+                <div class="results-section">
+                    <h3>Salaire</h3>
+                    <div class="result-line">
+                        <span>Salaire brut:</span>
+                        <span>${brut.toFixed(2)} €</span>
+                    </div>
+                </div>
+                
+                <hr class="separator">
+                
+                <div class="results-section">
+                    <h3>Cotisations Salariales</h3>
+                    <div class="result-line">
+                        <span>SS plafonnée:</span>
+                        <span>${res.ss_plaf.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>SS déplafonnée:</span>
+                        <span>${res.ss_déplaf.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Complémentaire tranche 1:</span>
+                        <span>${res.comp_t1.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>APEC:</span>
+                        <span>${res.APEC.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>CSG:</span>
+                        <span>${res.csg.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>CRDS:</span>
+                        <span>${res.crds.toFixed(2)} €</span>
+                    </div>
+                </div>
+
+                <hr class="separator">
+                
+                <div class="results-section">
+                    <h3>Net et Impôts</h3>
+                    <div class="result-line">
+                        <span>Salaire net avant impôts:</span>
+                        <span>${res.salaire_net_avant_impots.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Impôts:</span>
+                        <span>${res.impots.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Salaire net après impôts:</span>
+                        <span>${res.salaire_net_apres_impots.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Coût Total:</span>
+                        <span>${res.cout_total.toFixed(2)} €</span>
+                    </div>
+                </div>
+
+                <hr class="separator">
+                
+                <div class="results-section">
+                    <h3>Charges Patronales</h3>
+                    <div class="result-line">
+                        <span>SS danger:</span>
+                        <span>${res.ss_D.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Prévoyance:</span>
+                        <span>${res.prevoyance.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Mutuelle:</span>
+                        <span>${res.mutuL.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>ATMP:</span>
+                        <span>${res.atmp.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>SS plafonnée patron:</span>
+                        <span>${res.ss_plaf_P.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>SS déplafonnée patron:</span>
+                        <span>${res.ss_deplaf_P.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Complémentaire tranche 1 patron:</span>
+                        <span>${res.comp_t1_P.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Famille:</span>
+                        <span>${res.famille.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>APEC patron:</span>
+                        <span>${res.apec_P.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Autres contributions:</span>
+                        <span>${res.cont_dues.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span><strong>Coût des charges:</strong></span>
+                        <span><strong>${res.cout_patron.toFixed(2)} €</strong></span>
+                    </div>
+                </div>
+
+                <hr class="separator">
+                
+                <div class="results-section">
+                    <h3>Récapitulatif</h3>
+                    <div class="result-line">
+                        <span>URSSAF:</span>
+                        <span>${res.urssaf.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Retraite:</span>
+                        <span>${res.retr.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>AXA Prévoyance:</span>
+                        <span>${res.prev.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>AXA Mutuelle:</span>
+                        <span>${res.mutuel.toFixed(2)} €</span>
+                    </div>
+                    <div class="result-line">
+                        <span>Impôts:</span>
+                        <span>${res.impot.toFixed(2)} €</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('results').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
